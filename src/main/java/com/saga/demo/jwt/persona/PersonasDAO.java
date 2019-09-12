@@ -9,7 +9,6 @@ import java.util.Map;
 public class PersonasDAO {
     private static String PATT_PERSONAS = "_X_PERSONAS_X_";
     private static String JSON_RES_STR = "{\"personas\":[" + PATT_PERSONAS + "]}";
-//    private static String BBDD_URL = "jdbc:mysql://192.168.1.167/prototipo";
     private static String BBDD_URL = "jdbc:mysql://localhost/prototipo";
     private static String BBDD_USER = "prototipo";
     private static String BBDD_PSW = "prototipo";
