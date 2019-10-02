@@ -14,8 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import static com.saga.demo.jwt.security.Constants.LOGIN_URL;
-import static com.saga.demo.jwt.security.Constants.LOGOUT_URL;
+import static com.saga.demo.jwt.security.Constants.*;
 
 @Configuration
 @EnableWebSecurity
@@ -46,6 +45,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .csrf().disable()
                 .authorizeRequests().antMatchers(HttpMethod.POST, LOGIN_URL, LOGOUT_URL).permitAll()
+                .antMatchers(HttpMethod.GET, COSA_URL).permitAll()
                 .anyRequest().authenticated().and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()));
