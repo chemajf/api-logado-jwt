@@ -2,6 +2,8 @@ package com.saga.demo.jwt.oficina;
 
 
 import com.saga.demo.jwt.elementos.Enlace;
+import com.saga.demo.jwt.response.Respuesta;
+import com.saga.demo.jwt.response.StandarResponse;
 import com.saga.demo.jwt.util.RandomUtil;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +46,7 @@ public class OficinaController {
     }
 
     @GetMapping(value = {"/oficina/buscador", "/oficina/buscador/"})
-    public OficinaResultadoBuscador buscador(@RequestParam("p") int p) {
+    public Respuesta buscador(@RequestParam("p") int p) {
         OFICINAS.clear();
         for (int i = 0; i < 5; i++) {
             List<Enlace> acciones = RANDOM_UTIL.acciones();
@@ -63,26 +65,34 @@ public class OficinaController {
                     .acciones(acciones)
             );
         }
-        return new OficinaResultadoBuscador().p(p).max(5).paginas(11).oficinas(OFICINAS).tam(52).mensaje("Listado de Oficinas").verMensaje(false);
+        List datas = new ArrayList();
+        datas.add(new OficinaResultadoBuscador().p(p).max(5).paginas(11).oficinas(OFICINAS).tam(52).mensaje("Listado de Oficinas").verMensaje(false));
+        RANDOM_UTIL.dormir(2);
+        return new Respuesta().datas(datas).standarResponse(StandarResponse.getStandarResponseOk());
+        //return new OficinaResultadoBuscador().p(p).max(5).paginas(11).oficinas(OFICINAS).tam(52).mensaje("Listado de Oficinas").verMensaje(false);
     }
 
-    @GetMapping(value = {"/oficinas/", "/oficinas"})
+    @GetMapping(value = {"/oficina/", "/oficina"})
     public List<Oficina> getOficina() {
         fillOficinas();
+        RANDOM_UTIL.dormir(2);
         return OFICINAS;
     }
 
-    @GetMapping(value = {"/oficinas/{id}", "/oficinas/{id}/"})
+    @GetMapping(value = {"/oficina/{id}", "/oficina/{id}/"})
     public Oficina getOficina(@PathVariable("id") String id) {
+        RANDOM_UTIL.dormir(2);
+
         return new Oficina(4, "3001", true, true, "Calle del Arca 25, bajo derecha", "Sevilla", "Sevilla", "", "Oficina de Chema", 37.34798, -6.0392166, RANDOM_UTIL.acciones());
     }
 
-    @GetMapping(value = {"/oficinas/identificadores/consumo/{idOficina}", "/oficina/identificadores/consumo/{idOficina}"})
-    public List<Option> identificadoresConsumo(@PathVariable("idOficina") String idOficina) {
+    @GetMapping(value = {"/oficina/identificadores/filtro/{idOficina}", "/oficina/identificadores/filtro/{idOficina}"})
+    public Respuesta identificadoresConsumo(@PathVariable("idOficina") String idOficina) {
         List<Option> res = new ArrayList<>();
         res.add(new Option().nombre("5245 -Energía activa Kwh III").valor("9733"));
         res.add(new Option().nombre("5244 -Energía activa Kwh III").valor("3809"));
         res.add(new Option().nombre("5248 -Energía reactiva capacitiva KvarhC III").valor("3814"));
-        return res;
+        RANDOM_UTIL.dormir(2);
+        return new Respuesta().datas(res).standarResponse(StandarResponse.getStandarResponseOk());
     }
 }

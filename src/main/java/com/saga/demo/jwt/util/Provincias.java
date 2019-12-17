@@ -74,7 +74,7 @@ public class Provincias {
         PROVINCIAS.add("Melilla");
     }
 
-    public static List<String> getProvincias() {
+    public List<String> getProvincias() {
         return PROVINCIAS;
     }
 }

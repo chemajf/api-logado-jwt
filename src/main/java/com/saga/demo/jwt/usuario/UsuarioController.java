@@ -1,5 +1,7 @@
 package com.saga.demo.jwt.usuario;
 
+import com.saga.demo.jwt.response.Respuesta;
+import com.saga.demo.jwt.response.StandarResponse;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +37,8 @@ public class UsuarioController {
     }
 
     @GetMapping(value = {"/users/menu/", "/users/menu"})
-    public Menu menu() {
+    public Respuesta menu() {
+
         Menu menu = new Menu();
 
         /*List<MenuItem> l1 = new ArrayList<>();
@@ -67,6 +70,11 @@ public class UsuarioController {
         litado.add(new MenuItem().name("Oficinas").uri("/oficinas"));
         litado.add(new MenuItem().name("Consultas").uri("/consultas"));
         litado.add(new MenuItem().name("Salir").uri("/salir"));
-        return new Menu(litado);
+
+
+        List datas = new ArrayList();
+        datas.add(new Menu(litado));
+
+        return new Respuesta().datas(datas).standarResponse(StandarResponse.getStandarResponseOk());
     }
 }

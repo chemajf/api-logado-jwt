@@ -1,5 +1,6 @@
 package com.saga.demo.jwt.security;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saga.demo.jwt.usuario.Usuario;
 import io.jsonwebtoken.Jwts;
@@ -16,9 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 import static com.saga.demo.jwt.security.Constants.*;
 
@@ -47,8 +46,26 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
 
-        String token = Jwts.builder().setIssuedAt(new Date()).setIssuer(ISSUER_INFO)
+
+        String strJson = "{\"id\":14818, \"nombre\":\"La oficina mas chula del mundo\"}";
+        JsonNode jsonNode = null;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            jsonNode = objectMapper.readTree(strJson);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("perona", "humana");
+        map.put("oficina", jsonNode);
+
+        String token = Jwts.builder()
+                .setClaims(map)
+                .setIssuedAt(new Date())
+                .setIssuer(ISSUER_INFO)
                 .setSubject(((User) auth.getPrincipal()).getUsername())
+                .setId("Identificador único del token incluso entre diferente proveedores de servicio")
                 .setExpiration(calculateExpirationDate())
                 .signWith(SignatureAlgorithm.HS512, SUPER_SECRET_KEY).compact();
         response.addHeader(HEADER_AUTHORIZACION_KEY, TOKEN_BEARER_PREFIX + " " + token);
@@ -56,6 +73,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     /**
      * Calcula el tiempo de expiración del TOKEN
+     *
      * @return
      */
     private Date calculateExpirationDate() {

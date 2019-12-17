@@ -1,5 +1,7 @@
 package com.saga.demo.jwt.pestana;
 
+import com.saga.demo.jwt.response.Respuesta;
+import com.saga.demo.jwt.response.StandarResponse;
 import com.saga.demo.jwt.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,7 +14,7 @@ import java.util.List;
 public class PestanaController {
 
     @GetMapping(value = {"/pestanas", "/pestanas/"})
-    public List<Pestana> buscador(@RequestParam("apartado") String apartado) {
+    public Respuesta buscador(@RequestParam("apartado") String apartado) {
         List<Pestana> res = new ArrayList<>();
         if (StringUtils.isNotEmpty(apartado)) {
             if (apartado.equalsIgnoreCase("oficina")) {
@@ -30,6 +32,6 @@ public class PestanaController {
                 res.add(new Pestana().nombre("Comparativa").identificador("ConsultasComparativa").orden(2).listaTipoDato(null).action("#").params(null));
             }
         }
-        return res;
+        return new Respuesta().datas(res).standarResponse(StandarResponse.getStandarResponseOk());
     }
 }

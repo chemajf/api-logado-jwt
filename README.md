@@ -12,6 +12,9 @@ Donde entre otro aspectos se configura el puerto y el contexto de la aplicación
 Para arrancar el servicio solo hay que ejecutar el método _main_ de la clase:
 ```com.saga.demo.jwt.Application```
 
+## Algoritmo de 
+HS512 firma
+
 ## Probar el API
 Los datos para realizar un logado correcto son:
 - **usuario**: *admin*
